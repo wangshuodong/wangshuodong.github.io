@@ -1,6 +1,6 @@
 <!-- 侧边栏 -->
 
-* [nodejs相关](README)
+* [TypeScript笔记](README)
 * [markdown笔记](markdown)
 * [docsify笔记](docsify)
 * 前端技术
