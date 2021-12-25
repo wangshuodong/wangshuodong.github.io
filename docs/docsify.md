@@ -24,7 +24,8 @@ npm config set registry https://registry.npm.taobao.org
 npm get registry
 ```
 ## 国内解决github无法访问的问题
-> [地址](https://www.jianshu.com/p/8fcc2acd77a7)
+> [第一种办法](https://www.jianshu.com/p/8fcc2acd77a7)
+> [第二种办法](https://www.cnblogs.com/lvchaoshun/p/14646135.html)
 ```shell
 140.82.112.4      github.com
 199.232.69.194    github.global.ssl.fastly.net
