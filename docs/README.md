@@ -6,7 +6,11 @@
 npm install -g typescript
 查看版本
 tsc -v
-安装ts-node
+编译成js文件
+tsc demo.ts
+初始化tsconfig.json
+tsc -init
+安装ts-node,可以直接使用ts-node运行ts文件
 npm install -g ts-node
 ```
 
@@ -94,4 +98,44 @@ const getGirl = (girl:Girl)=> {
     console.log(girl.say())
 }
 getGirl(girl)
+```
+
+## 枚举类型
+
+```typescript
+enum Status {
+    dog,
+    cat,
+    pig
+}
+不给值，默认从下标0开始
+enum Status {
+    dog = 'a',
+    cat = 2,
+    pig = 3
+}
+function getStauts(status : any) {
+    if (status === Status.dog) {
+        console.log("dog")
+    } else if (status === Status.cat) {
+        console.log("cat")
+    } else if (status === Status.pig) {
+        console.log("pig")
+    }
+}
+getStauts('a')
+```
+## 泛型
+
+```typescript
+function join<T>(first:T, second:T) {
+    return `${first}${second}`
+}
+console.log(join<string>('a', 'b'))
+
+//泛型中数组的使用
+function myFun<T>(param: Array<T>) {
+    return param
+}
+console.log(myFun<string>(['aa', 'bb']))
 ```
