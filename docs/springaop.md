@@ -140,13 +140,104 @@ public class UserTest {
 }
 ```
 
-## @within和@annotation的区别
-
-* @within 对象级别
-* @annotation 方法级别
-
 ## 面向切面编程
 
 [例子](https://blog.csdn.net/fz13768884254/article/details/83538709)
+>  @within和@annotation的区别
+> @within 对象级别 
+> @annotation 方法级别
 
-@Aspect:作用是把当前类标识为一个切面供容器读取
+* @Aspect 作用是把当前类标识为一个切面供容器读取
+* @Pointcut 放在方法头上，定义一个可被别的方法引用的切入点表达式。
+* @Before  在切点方法之前执行
+* @After  在切点方法之后执行
+* @AfterReturning 切点方法返回后执行
+* @AfterThrowing 切点方法抛异常执行
+* @Around 属于环绕增强，能控制切点执行前，执行后，，用这个注解后，程序抛异常，会影响@AfterThrowing这个注解
+
+```java
+@Target({ ElementType.PARAMETER, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Log
+{
+    /**
+     * 模块 
+     */
+    public String title() default "";
+
+    /**
+     * 是否保存请求的参数
+     */
+    public boolean isSaveRequestData() default true;
+}
+```
+
+```java
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+
+@Aspect
+@Component
+@Slf4j
+public class AspectTest {
+
+    @Pointcut("@annotation(com.wangsd.springAop.Log)")
+    public void doPointCut() {
+
+    }
+
+    @Around(value = "doPointCut()")
+    public Object methodAround(ProceedingJoinPoint point) throws Throwable {
+        System.out.println("----methodAround----");
+        System.out.println(point.getSignature());
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        log.debug("请求地址:" + request.getRequestURL().toString());
+        log.debug("请求方式:" + request.getMethod());
+        return point.proceed();
+    }
+
+    @Before(value = "doPointCut()")
+    public void methodBefore(JoinPoint point) {
+        MethodSignature signature = (MethodSignature) point.getSignature();
+        System.out.println("----methodBefore----");
+        System.out.println("目标方法为：" + point.getSignature().getDeclaringTypeName() +
+                "." + point.getSignature().getName());
+        System.out.println("参数为：" + Arrays.toString(point.getArgs()));
+        System.out.println("被植入的目标对象为：" + point.getTarget());
+    }
+
+    @AfterReturning(value = "doPointCut()", returning = "result")
+    public void methodAfterReturing(JoinPoint point, Object result) {
+        System.out.println("----methodAfterReturing----");
+    }
+
+    @AfterThrowing(value = "doPointCut()", throwing = "ex")
+    public void methodAfterThrowing(JoinPoint point, Throwable ex) {
+        System.out.println("----methodAfterThrowing----");
+    }
+}
+```
+```java
+@RestController
+@RequestMapping("/aspect")
+public class AspectController {
+
+    @Log
+    @RequestMapping("/test")
+    public String test(String username){
+//        int a = 1/0;
+        return "成功";
+    }
+}
+```
