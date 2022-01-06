@@ -11,4 +11,4 @@
 - 众多主题
 
 [GitHub](https://github.com/docsifyjs/docsify/)
-[开始阅读](README)
+[开始阅读](datasource)
