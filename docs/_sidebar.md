@@ -7,4 +7,5 @@
 * [其他记录](other.md)
 * [设计模式](design23.md)
 * [springAop](springaop.md)
+* [项目搭建笔记](wangsdTemplate.md)
 
