@@ -18,6 +18,15 @@ docsify serve docs
 npm config set registry https://registry.npm.taobao.org
 ```
 
+> 安装yarn
+
+```shell
+npm install -g yarn
+
+yarn config set registry https://registry.npm.taobao.org -g
+yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
+```
+
 > 查看镜像
 
 ```shell
